@@ -1,0 +1,32 @@
+name: Math Coverage Badge
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Run unit tests
+        run: cd math && go test -v -cover -coverprofile=coverage.out
+      - name: Update coverage badge
+        run: |
+          lines=$(cat coverage.out | wc -l)
+          passes=$(grep -v -e " 0$" coverage.out | wc -l)
+          pct=$(python -c "print(round(((float($passes-1)/float($lines-1))*100),2))")
+          cov_colour=$(python -c "print('red' if $pct < 50 else 'orange' if $pct < 85 else 'green' if $pct < 100 else 'brightgreen')")
+          new_str=$(python -c "x='$pct'; y='$cov_colour'; print('coverage-'+x+'%25-'+y)")
+          existing_badge=$(grep '\[coverage\]' README.md)
+          existing_str=$(python -c "x='$existing_badge'; print(x[41:-1])")
+          if [ "$existing_str" == "$new_str" ]; then echo "No change in coverage"; else echo "Updating coverage" && sed -i "s/$existing_str/$new_str/g" README.md; fi
+      - name: Push any changes
+        uses: mikeal/publish-to-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: main
