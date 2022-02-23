@@ -17,6 +17,7 @@ jobs:
         run: cd math && go test -v -cover -coverprofile=coverage.out
       - name: Update coverage badge
         run: |
+          cd math
           lines=$(cat coverage.out | wc -l)
           passes=$(grep -v -e " 0$" coverage.out | wc -l)
           pct=$(python -c "print(round(((float($passes-1)/float($lines-1))*100),2))")
