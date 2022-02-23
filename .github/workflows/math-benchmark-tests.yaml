@@ -1,4 +1,4 @@
-name: Math Unit Tests
+name: Math Benchmark Tests
 on:
   push:
     branches:
@@ -16,5 +16,5 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      - name: Run unit tests
-        run: cd math && go test -v -cover
+      - name: Run benchmark tests
+        run: cd math && go test -v -bench . -run Bench -benchmem
