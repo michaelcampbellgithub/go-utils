@@ -14,3 +14,4 @@ This library remains under active development, and so there are plenty of issues
 * math package - Look at missing benchmark tests (commented out). Need to substitute the lack of support for these data types in the std lib [math/rand](https://cs.opensource.google/go/go/+/master:src/math/rand/) package
 * math package - What to do with benchmark output? Seems pretty pointless not having a quality gate set
 * Think up other functionality for this library
+
